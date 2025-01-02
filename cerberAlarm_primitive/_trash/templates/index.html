@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Alarm</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    </head>
+    <body>
+        <div class="container-principal">
+            <div class="container-rightside-bar">
+                <a href="#" class="link-getpdf">User Manual</a>
+                <h2>Quick Access</h2>
+                <table class="table-quick-access">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Sequence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bypass</td>
+                            <td>[*][3][Cod de utilizator][1-5]</td>
+                        </tr>
+                        <tr>
+                            <td>Chime</td>
+                            <td>[*][6]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container-zones">
+                <h1>Open Zones</h1>
+                <h2>Last update: <span class="last-update"></span></h2>
+                <table class="table-zones">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>Friendly Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-zones-tbody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container-keypad">
+                <h1>Keypad</h1>
+                <h2>History: <span class="history-keypad"></span></h2>
+                <div class="keypad">
+                    <button class="keypad-button" data-key="1">1</button>
+                    <button class="keypad-button" data-key="2">2</button>
+                    <button class="keypad-button" data-key="3">3</button>
+                    <button class="keypad-button" data-key="4">4</button>
+                    <button class="keypad-button" data-key="5">5</button>
+                    <button class="keypad-button" data-key="6">6</button>
+                    <button class="keypad-button" data-key="7">7</button>
+                    <button class="keypad-button" data-key="8">8</button>
+                    <button class="keypad-button" data-key="9">9</button>
+                    <button class="keypad-button" data-key="*">*</button>
+                    <button class="keypad-button" data-key="0">0</button>
+                    <button class="keypad-button" data-key="#">#</button>
+                </div>
+            </div>
+        </div>
+         
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    </body>
+</html>
