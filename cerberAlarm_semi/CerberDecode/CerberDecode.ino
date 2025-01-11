@@ -7,6 +7,11 @@
 #define MASTER 1
 #define SLAVE 0
 
+const int nrBypassZone = 4;
+const int listaBypassZone[] = {3, 4, 5, 6};
+const int alarmKeyPin = 7;
+const int relayResetSenzorFum = 2;
+
 int clock_previous = 0;
 unsigned long int timer = 0;
 
@@ -77,6 +82,17 @@ void setup() {
   pinMode(pin_data_transistor, OUTPUT);
   digitalWrite(pin_data_transistor, LOW);
   Serial.begin(115200);
+
+  // Set up bypass zones, all off by default
+  for (int i = 0; i < nrBypassZone; i++) {
+    pinMode(listaBypassZone[i], OUTPUT);
+    digitalWrite(listaBypassZone[i], LOW);
+  }
+  pinMode(alarmKeyPin, OUTPUT);
+  digitalWrite(alarmKeyPin, LOW);
+
+  pinMode(relayResetSenzorFum, OUTPUT);
+  digitalWrite(relayResetSenzorFum, LOW);
 }
 
 void loop() {
@@ -119,7 +135,7 @@ void loop() {
   // Example: Send data when "SEND " is received
   if (Serial.available() > 0) {
     String input = Serial.readString();
-    if (input.startsWith("SEND ")) {
+    if (input.startsWith("SEND$")) {
       String hexData = input.substring(5); // Get the hex data to send
       sendBufferLength = 0;
 
@@ -132,6 +148,35 @@ void loop() {
 
       sending = true; // Start sending data
       sendBufferIndex = 0;
+    } else if (input.startsWith("BYPASS$")) {
+      String zoneToBypass = input.substring(7);
+      int zone = zoneToBypass.toInt();
+      if (zone >= 1 && zone <= 4) {
+        digitalWrite(listaBypassZone[zone - 1], HIGH);
+        Serial.println("G00" + String(zone) + "00");
+      }
+    } else if (input.startsWith("UNBYPASS$")) {
+      String zoneToUnbypass = input.substring(9);
+      int zone = zoneToUnbypass.toInt();
+      if (zone >= 1 && zone <= 4) {
+        digitalWrite(listaBypassZone[zone - 1], LOW);
+        Serial.println("H00" + String(zone) + "01");
+      }
+    } else if (input.startsWith("LISTBYPASS$")) {
+      Serial.print("L");
+      for (int i = 0; i < nrBypassZone; i++) {
+        Serial.print(digitalRead(listaBypassZone[i]));
+      }
+      Serial.println("0"); // Key Zone 5
+    } else if (input.startsWith("KEY$")) {
+      digitalWrite(alarmKeyPin, HIGH);
+      delay(1000);
+      digitalWrite(alarmKeyPin, LOW);
+      Serial.println("I00000");
+    } else if (input.startsWith("RESETFUM$")) {
+      digitalWrite(relayResetSenzorFum, HIGH);
+      delay(2000);
+      digitalWrite(relayResetSenzorFum, LOW);
     }
   }
 }
